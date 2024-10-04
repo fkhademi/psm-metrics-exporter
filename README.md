@@ -1,1 +1,1 @@
-# psm-openmetrics-api
+# psm-prometheus-exporter

@@ -1,0 +1,33 @@
+global:
+  scrape_interval: 1m
+  scrape_timeout: 10s
+  evaluation_interval: 1m
+scrape_configs:
+- job_name: psm-metrics
+  honor_labels: true
+  honor_timestamps: true
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  metrics_path: /psm-metrics
+  scheme: http
+  tls_config:
+    insecure_skip_verify: true
+  follow_redirects: true
+  enable_http2: true
+  static_configs:
+  - targets:
+    - 1.1.1.2:8080
+- job_name: switch-metrics
+  honor_labels: true
+  honor_timestamps: true
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  metrics_path: /switch-metrics
+  scheme: http
+  tls_config:
+    insecure_skip_verify: true
+  follow_redirects: true
+  enable_http2: true
+  static_configs:
+  - targets:
+    - 1.1.1.2:8080

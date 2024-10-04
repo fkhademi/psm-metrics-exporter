@@ -1,0 +1,37 @@
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana:/etc/grafana/provisioning/datasources
+  exporter:
+    image: psm-exporter:latest
+    container_name: exporter
+    ports:
+      - 8080:5000
+    restart: unless-stopped
+    environment:
+      - PSM_API_USER=admin
+      - PSM_API_PASSWORD='admin'
+      - PSM_IP='1.1.1.1'
+volumes:
+  prom_data: 

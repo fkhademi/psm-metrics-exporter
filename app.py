@@ -1,16 +1,19 @@
 #from prometheus_client import start_http_server, Gauge, Counter
 import requests
+import os
+import atexit
 import re
 import json
 from time import sleep
 from flask import Flask
 from datetime import datetime
+from apscheduler.schedulers.background import BackgroundScheduler
 
 requests.packages.urllib3.disable_warnings()
 
-psm_ip = '10.9.20.71'
-username = 'admin'
-password = 'Pensando0$'
+psm_ip = os.getenv('PSM_IP')
+username = os.getenv('PSM_API_USER')
+password = os.getenv('PSM_API_PASSWORD')
 tenant = "default"
 cookie_file = "cookies.txt"
 
@@ -54,15 +57,44 @@ def login_psm(psm_ip, cookie_file, username, password, tenant):
     return sid
 
 
+# Start the FLASK APP
 app = Flask(__name__)
-
-# Generate PSM Session ID to be used for gathering metrics
+# Global Flask variables
 app.config['psm_sid'] = login_psm(psm_ip, cookie_file, username, password, tenant)
 app.config['psm_ip'] = psm_ip
 
 
+def check_session_id():
+    # Check the PSM Session ID and if it expires, create a new session
+    url = 'https://'+ app.config['psm_ip'] +'/telemetry/v1/metrics'
+    headers = {
+        'Cookie': 'sid=' + app.config['psm_sid'],
+        'Content-Type': 'application/json'
+    }
+    body = '{"queries":[{"kind":"Node","start-time":"now() - 2m","end-time":"now()"}]}'
+    session = requests.Session()
+
+    try:
+        response = session.request( "POST", url, headers=headers, data=body, verify=False )
+
+        if response.status_code != 200:
+            app.config['psm_sid'] = login_psm(psm_ip, cookie_file, username, password, tenant)
+
+    except requests.exceptions.RequestException as e:
+        print(e)
+        raise
+
+
+# Scheduler which runs once every minute to verify that the PSM Session ID is valid
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=check_session_id, trigger="interval", seconds=60)
+scheduler.start()
+atexit.register(lambda: scheduler.shutdown())
+
+
 def get_switches():
     # Get Switches, versions, status and store in a json
+    # This is used to map Switch MAC Address to Switch Name
     switches = []
     sid = app.config['psm_sid']
 
@@ -101,20 +133,6 @@ def get_switches():
 
 app.config['switches'] = get_switches()
 
-def get_psm_metrics(psm_ip, sid, kind):
-   # Grab the metrics from PSM
-   headers = {
-      'Cookie': 'sid=' + sid,
-      'Content-Type': 'application/json'
-   }
-
-   url = 'https://'+ psm_ip +'/telemetry/v1/metrics'
-   body = '{"queries":[{"kind":"' + kind + '","start-time":"now() - 2m","end-time":"now()"}]}'
-   get_metrics_api_request = send_api_request(url, headers, body, "cookies.txt", 'GET')
-
-   return get_metrics_api_request
-
-
 def convert_time(time):
    # Convert date to int64 timestamp
    a = time.rsplit('.',1)
@@ -133,216 +151,92 @@ def get_reporter_id(switch_id, switches):
             switch_name = switch_id
     return switch_name
 
+def get_columns(fields):
+    # Get columns per metric kind and store in a json
+    num_fields = 0
+    for i in fields:
+        num_fields = num_fields + 1
+
+    columns = []
+
+    for j in range(num_fields):
+        field_obj = {
+            'index': j,
+            'field_name': fields[j]
+        }
+        columns.append(field_obj)
+
+    return columns
+
+def write_metrics(type, kind):
+    # Write a metrics api output based on a json object.  type should be Switch or PSM
+    url = 'https://'+ app.config['psm_ip'] +'/telemetry/v1/metrics'
+    headers = {
+        'Cookie': 'sid=' + app.config['psm_sid'],
+        'Content-Type': 'application/json'
+    }
+
+    metrics = ""
+    reporterID = ""
+    psm_date = ""
+
+    body = '{"queries":[{"kind":"'+kind+'","start-time":"now() - 2m","end-time":"now()"}]}'
+
+    response = send_api_request(url, headers, body, "cookies.txt", 'GET')
+    parsed_details = json.loads(response['content'])
+    if 'series' in parsed_details["results"][0]:
+        columns = parsed_details["results"][0]["series"][0]["columns"]
+        values = parsed_details["results"][0]["series"][0]["values"]
+
+        fields = get_columns(columns)
+        num_columns = len(fields)
+        
+        for row in values:
+            if type == "Switch":
+                for i in range(1, int(num_columns-4)):
+                    metric = row[i]
+                    if metric == None:
+                        metric = 0
+                    psm_date = convert_time(row[0])
+                    reporterID = get_reporter_id(row[num_columns-3], app.config['switches'])
+                    unit = row[num_columns-1]
+                    metrics += '%s_%s{node="%s"} %d %d\n' % (kind, fields[i]['field_name'], reporterID, metric, psm_date)
+                    #metrics += '%s_%s{node="%s" network="%s"} %s\n' % (kind, fields[i]['field_name'], reporterID, row[num_columns-4], metric)
+            else: #elif #type == "PSM":
+                for i in range(1, int(num_columns-2)):
+                    reporterID = row[num_columns-1]
+                    metric = row[i]
+                    if metric == None:
+                        metric = 0
+                    psm_date = convert_time(row[0])
+                    metrics += '%s_%s{node="%s"} %d %d\n' % (kind, fields[i]['field_name'], reporterID, metric, psm_date)
+                    #metrics += '%s_%s{node="%s"} %d %d\n' % (kind, fields[i]['field_name'], reporterID, metric, psm_date)
+    return metrics
 
 @app.route('/switch-metrics')
 def switch_metrics():
+    # API for getting the Switch Metrics
     metrics = ""
-    # Get the PSM Session ID
-    sid = app.config['psm_sid']
-
-    # Get Power Metrics from PSM and parse them
-    power_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "PowerMetrics")['content']))["results"][0]["series"][0]["values"]
-
-    # Print PowerMetrics in open api format
-    for obj in power_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[5], app.config['switches'])
-
-        metrics += 'PowerMetrics_Pin{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'PowerMetrics_Pout1{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'PowerMetrics_Pout2{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
-
-    # Get AsicTemperatureMetrics Metrics from Switches
-    asictemp_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "AsicTemperatureMetrics")['content']))["results"][0]["series"][0]["values"]
-
-    for obj in asictemp_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[5], app.config['switches'])
-        #reporterID = obj[5]
-
-        metrics += 'AsicTemp_DieTemperature{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'AsicTemp_HbmTemperature{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'AsicTemp_LocalTemperature{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
-
-    # Get Lif Metrics from PSM
-    lif_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "LifMetrics")['content']))["results"][0]["series"][0]["values"]
-
-    for obj in lif_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[27], app.config['switches'])
-        #reporterID = obj[27]
-
-        metrics += 'LifMetrics_RxBroadcastBytes{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'LifMetrics_RxBroadcastPackets{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'LifMetrics_RxDMAError{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
-        metrics += 'LifMetrics_RxDropBroadcastBytes{node="%s"} %d %d\n' % (reporterID, obj[4], psm_date)
-        metrics += 'LifMetrics_RxDropBroadcastPackets{node="%s"} %d %d\n' % (reporterID, obj[5], psm_date)
-        metrics += 'LifMetrics_RxDropMulticastBytes{node="%s"} %d %d\n' % (reporterID, obj[6], psm_date)
-        metrics += 'LifMetrics_RxDropMulticastPackets{node="%s"} %d %d\n' % (reporterID, obj[7], psm_date)
-        metrics += 'LifMetrics_RxDropUnicastBytes{node="%s"} %d %d\n' % (reporterID, obj[8], psm_date)
-        metrics += 'LifMetrics_RxDropUnicastPackets{node="%s"} %d %d\n' % (reporterID, obj[9], psm_date)
-        metrics += 'LifMetrics_RxMulticastBytes{node="%s"} %d %d\n' % (reporterID, obj[10], psm_date)
-        metrics += 'LifMetrics_RxMulticastPackets{node="%s"} %d %d\n' % (reporterID, obj[11], psm_date)
-        metrics += 'LifMetrics_RxUnicastBytes{node="%s"} %d %d\n' % (reporterID, obj[12], psm_date)
-        metrics += 'LifMetrics_RxUnicastPackets{node="%s"} %d %d\n' % (reporterID, obj[13], psm_date)
-        metrics += 'LifMetrics_TxBroadcastBytes{node="%s"} %d %d\n' % (reporterID, obj[14], psm_date)
-        metrics += 'LifMetrics_TxBroadcastPackets{node="%s"} %d %d\n' % (reporterID, obj[15], psm_date)
-        metrics += 'LifMetrics_TxDropBroadcastBytes{node="%s"} %d %d\n' % (reporterID, obj[16], psm_date)
-        metrics += 'LifMetrics_TxDropBroadcastPackets{node="%s"} %d %d\n' % (reporterID, obj[17], psm_date)
-        metrics += 'LifMetrics_TxDropMulticastBytes{node="%s"} %d %d\n' % (reporterID, obj[18], psm_date)
-        metrics += 'LifMetrics_TxDropMulticastPackets{node="%s"} %d %d\n' % (reporterID, obj[19], psm_date)
-        metrics += 'LifMetrics_TxDropUnicastBytes{node="%s"} %d %d\n' % (reporterID, obj[20], psm_date)
-        metrics += 'LifMetrics_TxDropUnicastPackets{node="%s"} %d %d\n' % (reporterID, obj[21], psm_date)
-        metrics += 'LifMetrics_TxMulticastBytes{node="%s"} %d %d\n' % (reporterID, obj[22], psm_date)
-        metrics += 'LifMetrics_TxMulticastPackets{node="%s"} %d %d\n' % (reporterID, obj[23], psm_date)
-        metrics += 'LifMetrics_TxUnicastBytes{node="%s"} %d %d\n' % (reporterID, obj[24], psm_date)
-        metrics += 'LifMetrics_TxUnicastPackets{node="%s"} %d %d\n' % (reporterID, obj[25], psm_date)
-
-    # Get EgressDrops Metrics from PSM
-    egressdrops_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "EgressDrops")['content']))["results"][0]["series"][0]["values"]
-
-    for obj in egressdrops_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[16], app.config['switches'])
-        #reporterID = obj[16]
-
-        metrics += 'EgressDrops_CoPPDrops{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'EgressDrops_FlowepochmismatchCoPPdrops{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'EgressDrops_FlowmissCoPPdrops{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
-        metrics += 'EgressDrops_ForwardingDrops{node="%s"} %d %d\n' % (reporterID, obj[4], psm_date)
-        metrics += 'EgressDrops_InvalidMirrorSessionDrops{node="%s"} %d %d\n' % (reporterID, obj[5], psm_date)
-        metrics += 'EgressDrops_InvalidSessionDrops{node="%s"} %d %d\n' % (reporterID, obj[6], psm_date)
-        metrics += 'EgressDrops_MpuExceptionDrops{node="%s"} %d %d\n' % (reporterID, obj[7], psm_date)
-        metrics += 'EgressDrops_ParserErrorDrops{node="%s"} %d %d\n' % (reporterID, obj[8], psm_date)
-        metrics += 'EgressDrops_PipelinePacketLoopDrops{node="%s"} %d %d\n' % (reporterID, obj[9], psm_date)
-        metrics += 'EgressDrops_PolicyDrops{node="%s"} %d %d\n' % (reporterID, obj[10], psm_date)
-        metrics += 'EgressDrops_RXPolicerDrops{node="%s"} %d %d\n' % (reporterID, obj[11], psm_date)
-        metrics += 'EgressDrops_TxPolicerDrops{node="%s"} %d %d\n' % (reporterID, obj[12], psm_date)
-        metrics += 'EgressDrops_UnexpectedSessionStateDrops{node="%s"} %d %d\n' % (reporterID, obj[13], psm_date)
-        metrics += 'EgressDrops_VmotionTransientDrops{node="%s"} %d %d\n' % (reporterID, obj[14], psm_date)
-
-    # Get IngressDrops Metrics from PSM
-    ingressdrops_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "IngressDrops")['content']))["results"][0]["series"][0]["values"]
-
-    for obj in ingressdrops_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[16], app.config['switches'])
-        #reporterID = obj[16]
-
-        metrics += 'IngressDrops_CoPPDrops{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'IngressDrops_FlowepochmismatchCoPPdrops{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'IngressDrops_FlowmissCoPPdrops{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
-        metrics += 'IngressDrops_ForwardingDrops{node="%s"} %d %d\n' % (reporterID, obj[4], psm_date)
-        metrics += 'IngressDrops_InvalidMirrorSessionDrops{node="%s"} %d %d\n' % (reporterID, obj[5], psm_date)
-        metrics += 'IngressDrops_InvalidSessionDrops{node="%s"} %d %d\n' % (reporterID, obj[6], psm_date)
-        metrics += 'IngressDrops_MpuExceptionDrops{node="%s"} %d %d\n' % (reporterID, obj[7], psm_date)
-        metrics += 'IngressDrops_ParserErrorDrops{node="%s"} %d %d\n' % (reporterID, obj[8], psm_date)
-        metrics += 'IngressDrops_PipelinePacketLoopDrops{node="%s"} %d %d\n' % (reporterID, obj[9], psm_date)
-        metrics += 'IngressDrops_PolicyDrops{node="%s"} %d %d\n' % (reporterID, obj[10], psm_date)
-        metrics += 'IngressDrops_RXPolicerDrops{node="%s"} %d %d\n' % (reporterID, obj[11], psm_date)
-        metrics += 'IngressDrops_TxPolicerDrops{node="%s"} %d %d\n' % (reporterID, obj[12], psm_date)
-        metrics += 'IngressDrops_UnexpectedSessionStateDrops{node="%s"} %d %d\n' % (reporterID, obj[13], psm_date)
-        metrics += 'IngressDrops_VmotionTransientDrops{node="%s"} %d %d\n' % (reporterID, obj[14], psm_date)
-
-    # Get IngressDrops Metrics from PSM
-    flowstatssummary_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "FlowStatsSummary")['content']))["results"][0]["series"][0]["values"]
-
-    for obj in flowstatssummary_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[25], app.config['switches'])
-        #reporterID = obj[25]
-
-        metrics += 'FlowStatsSummary_ConnTrackDisabledSessionsOverIPv4{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'FlowStatsSummary_ConnTrackDisabledSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'FlowStatsSummary_DeletedConnTrackDisabledSessionsOverIPv4{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
-        metrics += 'FlowStatsSummary_DeletedConnTrackDisabledSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[4], psm_date)
-        metrics += 'FlowStatsSummary_DeletedICMPSessionsOverIPv4{node="%s"} %d %d\n' % (reporterID, obj[5], psm_date)
-        metrics += 'FlowStatsSummary_DeletedICMPSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[6], psm_date)
-        metrics += 'FlowStatsSummary_DeletedL2Sessions{node="%s"} %d %d\n' % (reporterID, obj[7], psm_date)
-        metrics += 'FlowStatsSummary_DeletedOtherSessionsOverIPv4{node="%s"} %d %d\n' % (reporterID, obj[8], psm_date)
-        metrics += 'FlowStatsSummary_DeletedOtherSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[9], psm_date)
-        metrics += 'FlowStatsSummary_DeletedTCPSessionsOverIPv4{node="%s"} %d %d\n' % (reporterID, obj[10], psm_date)
-        metrics += 'FlowStatsSummary_DeletedTCPSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[11], psm_date)
-        metrics += 'FlowStatsSummary_DeletedUDPSessionsOverIPv4{node="%s"} %d %d\n' % (reporterID, obj[12], psm_date)
-        metrics += 'FlowStatsSummary_DeletedUDPSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[13], psm_date)
-        metrics += 'FlowStatsSummary_ICMPSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[14], psm_date)
-        metrics += 'FlowStatsSummary_DeletedL2Sessions{node="%s"} %d %d\n' % (reporterID, obj[15], psm_date)
-        metrics += 'FlowStatsSummary_L2Sessions{node="%s"} %d %d\n' % (reporterID, obj[16], psm_date)
-        metrics += 'FlowStatsSummary_OtherSessionsOverIPv4{node="%s"} %d %d\n' % (reporterID, obj[17], psm_date)
-        metrics += 'FlowStatsSummary_OtherSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[18], psm_date)
-        metrics += 'FlowStatsSummary_SessionCreateErrors{node="%s"} %d %d\n' % (reporterID, obj[19], psm_date)
-        metrics += 'FlowStatsSummary_TCPSessionsOverIPv4{node="%s"} %d %d\n' % (reporterID, obj[20], psm_date)
-        metrics += 'FlowStatsSummary_TCPSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[21], psm_date)
-        metrics += 'FlowStatsSummary_UDPSessionsOverIPv4{node="%s"} %d %d\n' % (reporterID, obj[22], psm_date)
-        metrics += 'FlowStatsSummary_UDPSessionsOverIPv6{node="%s"} %d %d\n' % (reporterID, obj[23], psm_date)
-
-    # Get DataPathAssistStats Metrics from PSM
-    DataPathAssistStats_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "DataPathAssistStats")['content']))["results"][0]["series"][0]["values"]
-
-    for obj in DataPathAssistStats_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[30], app.config['switches'])
-        #reporterID = obj[25]
-
-        metrics += 'DataPathAssistStats_ALGFlowRefreshFailure{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'DataPathAssistStats_ALGFlowSyncReceiveFailed{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'DataPathAssistStats_ALGFlowSyncSendFailed{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
-        metrics += 'DataPathAssistStats_ARPDrops{node="%s"} %d %d\n' % (reporterID, obj[4], psm_date)
-        metrics += 'DataPathAssistStats_ARPPktsRx{node="%s"} %d %d\n' % (reporterID, obj[5], psm_date)
-        metrics += 'DataPathAssistStats_ARPRepliesTx{node="%s"} %d %d\n' % (reporterID, obj[6], psm_date)
-        metrics += 'DataPathAssistStats_DHCPDrops{node="%s"} %d %d\n' % (reporterID, obj[7], psm_date)
-        metrics += 'DataPathAssistStats_DHCPPktsRx{node="%s"} %d %d\n' % (reporterID, obj[8], psm_date)
-        metrics += 'DataPathAssistStats_DHCPPktsTx2ProxyServer{node="%s"} %d %d\n' % (reporterID, obj[9], psm_date)
-        metrics += 'DataPathAssistStats_DHCPPktsTx2RelayClient{node="%s"} %d %d\n' % (reporterID, obj[10], psm_date)
-        metrics += 'DataPathAssistStats_DHCPPktsTx2RelayServer{node="%s"} %d %d\n' % (reporterID, obj[11], psm_date)
-        metrics += 'DataPathAssistStats_DNSFailure{node="%s"} %d %d\n' % (reporterID, obj[12], psm_date)
-        metrics += 'DataPathAssistStats_FTPFailure{node="%s"} %d %d\n' % (reporterID, obj[13], psm_date)
-        metrics += 'DataPathAssistStats_FlowDeleteFailure{node="%s"} %d %d\n' % (reporterID, obj[14], psm_date)
-        metrics += 'DataPathAssistStats_FlowInstallFailure{node="%s"} %d %d\n' % (reporterID, obj[15], psm_date)
-        metrics += 'DataPathAssistStats_FlowSyncFailure{node="%s"} %d %d\n' % (reporterID, obj[16], psm_date)
-        metrics += 'DataPathAssistStats_FlowUpdateFailure{node="%s"} %d %d\n' % (reporterID, obj[17], psm_date)
-        metrics += 'DataPathAssistStats_MSRPCFailure{node="%s"} %d %d\n' % (reporterID, obj[18], psm_date)
-        metrics += 'DataPathAssistStats_NonSynTCPPktDrops{node="%s"} %d %d\n' % (reporterID, obj[19], psm_date)
-        metrics += 'DataPathAssistStats_RTSPFailure{node="%s"} %d %d\n' % (reporterID, obj[20], psm_date)
-        metrics += 'DataPathAssistStats_SunRPCFailure{node="%s"} %d %d\n' % (reporterID, obj[21], psm_date)
-        metrics += 'DataPathAssistStats_TFTPFailure{node="%s"} %d %d\n' % (reporterID, obj[22], psm_date)
-        metrics += 'DataPathAssistStats_TcpConnTrackFailure{node="%s"} %d %d\n' % (reporterID, obj[23], psm_date)
-        metrics += 'DataPathAssistStats_TotalDrops{node="%s"} %d %d\n' % (reporterID, obj[24], psm_date)
-        metrics += 'DataPathAssistStats_TotalPktsRx{node="%s"} %d %d\n' % (reporterID, obj[25], psm_date)
-        metrics += 'DataPathAssistStats_TotalSessionsAged{node="%s"} %d %d\n' % (reporterID, obj[26], psm_date)
-        metrics += 'DataPathAssistStats_TotalSessionsLearned{node="%s"} %d %d\n' % (reporterID, obj[27], psm_date)
-        metrics += 'DataPathAssistStats_UnknownNetwork{node="%s"} %d %d\n' % (reporterID, obj[28], psm_date)
-
-    # Get VnicDrops Metrics from PSM
-    VnicDrops_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "VnicDrops")['content']))["results"][0]["series"][0]["values"]
-
-    for obj in VnicDrops_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[5], app.config['switches'])
-        #reporterID = obj[25]
-
-        if obj[1] == None:
-            VnicDrops_PolicyDrops = 0
-        else:
-            VnicDrops_PolicyDrops = obj[1]
-        if obj[2] == None:
-            VnicDrops_UnexpectedSessionStateDrops = 0
-        else:
-            VnicDrops_UnexpectedSessionStateDrops = obj[2]
-        if obj[3] == None:
-            VnicDrops_VmotionTransientDrops = 0
-        else:
-            VnicDrops_VmotionTransientDrops = obj[3]
-
-        metrics += 'VnicDrops_PolicyDrops{node="%s"} %s %d\n' % (reporterID, VnicDrops_PolicyDrops, psm_date)
-        metrics += 'VnicDrops_UnexpectedSessionStateDrops{node="%s"} %s %d\n' % (reporterID, VnicDrops_UnexpectedSessionStateDrops, psm_date)
-        metrics += 'VnicDrops_VmotionTransientDrops{node="%s"} %s %d\n' % (reporterID, VnicDrops_VmotionTransientDrops, psm_date)
+    metrics += write_metrics("Switch", "PowerMetrics")
+    metrics += write_metrics("Switch", "AsicTemperatureMetrics")
+    metrics += write_metrics("Switch", "LifMetrics")
+    metrics += write_metrics("Switch", "EgressDrops")
+    metrics += write_metrics("Switch", "IngressDrops")
+    metrics += write_metrics("Switch", "FlowStatsSummary")
+    metrics += write_metrics("Switch", "DataPathAssistStats")
+    metrics += write_metrics("Switch", "VnicDrops")
+    metrics += write_metrics("Switch", "MemoryMetrics")
+    metrics += write_metrics("Switch", "AsicCpuMetrics")
+    metrics += write_metrics("Switch", "MacMetrics")
+    metrics += write_metrics("Switch", "IPsecEncryptMetrics")
+    metrics += write_metrics("Switch", "IPsecDecryptMetrics")
+    metrics += write_metrics("Switch", "RuleMetrics")
 
     # Get DSS Status from PSM
     url = 'https://'+ app.config['psm_ip'] +'/configs/cluster/v1/distributedservicecards'
 
     headers = {
-        'Cookie': 'sid=' + sid,
+        'Cookie': 'sid=' + app.config['psm_sid'],
         'Content-Type': 'application/json'
     }
 
@@ -357,29 +251,25 @@ def switch_metrics():
             switch_health = 0
         dsc_version = obj["status"]["DSCVersion"]
         reporterID = get_reporter_id(obj["status"]["primary-mac"], app.config['switches'])
-        #reporterID = obj["status"]["primary-mac"]
         switch_version = obj["status"]["dss-info"]["version"]
+        serial = obj["status"]["serial-num"]
+        forwarding_profile = obj["status"]["dss-info"]["forwarding-profile"]
 
         metrics += 'DSC_health_status{node="%s" health_status="%s"} %s\n' % (reporterID, switch_health, switch_health)
         metrics += 'DSC_dsc_version{node="%s" dsc_version="%s"} 1\n' % (reporterID, dsc_version)
         metrics += 'DSC_switch_version{node="%s" switch_version="%s"} 1\n' % (reporterID, switch_version)
-        metrics += 'DSC_node{node="%s" switch_version="%s"} 1\n' % (reporterID, switch_version)
-        metrics += 'DSC_node{node="%s" health_status="%s" dsc_version="%s" switch_version="%s"} 1\n' % (reporterID, switch_health, dsc_version, switch_version) 
+        metrics += 'DSC_node{node="%s" serial="%s" forwarding_profile="%s" health_status="%s" dsc_version="%s" switch_version="%s"} 1\n' % (reporterID, serial, forwarding_profile, switch_health, dsc_version, switch_version) 
 
     # Try to find out if ELBA is enabled
     url = 'https://'+ app.config['psm_ip'] +'/configs/network/v1/tenant/default/networks'
-    headers = {
-        'Cookie': 'sid=' + app.config['psm_sid'],
-        'Content-Type': 'application/json'
-    }
 
-    body = '{"queries":[{"kind":"NetworkList","start-time":"now() - 2m","end-time":"now()"}]}'
+    body = ''
 
     network_objects = (json.loads(send_api_request(url, headers, body, cookie_file, 'GET')['content']))['items']
 
     elba_enabled = 0
     network_counter = 0
-
+    # To figure out if Elba is enabled, we get all networks and check whether at least one does not have Service Bypass enabled
     for obj in network_objects:
         if obj['kind'] == 'Network':
             network_counter = network_counter + 1
@@ -387,77 +277,46 @@ def switch_metrics():
                 if obj['spec']['service-bypass'] == False:
                     elba_enabled = 1
                     break
-                    #print('bypass=%s, name=%s' % (obj['spec']['service-bypass'], obj['meta']['name']))
-                else:
-                    elba_enabled = 1
-                    #print('bypass=True, name=%s' % (obj['meta']['name']))
+            else:
+                elba_enabled = 1
 
     metrics += 'DSC_ELBA_enabled{elba_enabled="%s"} %s\n' % (elba_enabled, elba_enabled)
     metrics += 'DSC_Number_of_networks{num_networks="%d"} %d\n' % (network_counter, network_counter)
+
+    # Count the VRFs
+    url = 'https://'+ app.config['psm_ip'] +'/configs/network/v1/tenant/default/virtualrouters'
+    vrf_counter = 0
+    network_objects = (json.loads(send_api_request(url, headers, body, cookie_file, 'GET')['content']))['items']
+    for obj in network_objects:
+        if obj['kind'] == 'VirtualRouter':
+            vrf_counter = vrf_counter + 1
+    metrics += 'DSC_Number_of_vrfs{num_vrfs="%d"} %d' % (vrf_counter, vrf_counter)
 
     return metrics
 
 @app.route('/psm-metrics')
 def psm_metrics():
+    # API for getting PSM Metrics
     metrics = ""
-    # Get the PSM Session ID
-    sid = app.config['psm_sid']
+    metrics += write_metrics("PSM", "Cluster")
+    metrics += write_metrics("PSM", "Node")
+    # Get some PSM cluster info
+    url = 'https://'+ app.config['psm_ip'] +'/configs/cluster/v1/cluster'
+    headers = {
+        'Cookie': 'sid=' + app.config['psm_sid'],
+        'Content-Type': 'application/json'
+    }
 
-    # Get Cluster Metrics from PSM
-    cluster_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "Cluster")['content']))["results"][0]["series"][0]["values"]
-
-    for obj in cluster_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[9], app.config['switches'])
-        #reporterID = obj[9]
-
-        metrics += 'Cluster_AdmittedNICs{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'Cluster_DecommissionedNICs{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'Cluster_DisconnectedNICs{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
-        metrics += 'Cluster_HealthyNICs{node="%s"} %d %d\n' % (reporterID, obj[4], psm_date)
-        metrics += 'Cluster_PendingNICs{node="%s"} %d %d\n' % (reporterID, obj[5], psm_date)
-        metrics += 'Cluster_RejectedNICs{node="%s"} %d %d\n' % (reporterID, obj[6], psm_date)
-        metrics += 'Cluster_UnhealthyNICs{node="%s"} %d %d\n' % (reporterID, obj[7], psm_date)
-
-    # Get Node Metrics from PSM and parse them
-    node_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "Node")['content']))["results"][0]["series"][0]["values"]
-
-    # Print NodeMetrics in open api format
-    for obj in node_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[14], app.config['switches'])
-        #reporterID = obj[14]
-
-        metrics += 'Node_CPUUsedPercent{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'Node_DiskFree{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'Node_DiskTotal{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
-        metrics += 'Node_DiskUsed{node="%s"} %d %d\n' % (reporterID, obj[4], psm_date)
-        metrics += 'Node_DiskUsedPercent{node="%s"} %d %d\n' % (reporterID, obj[5], psm_date)
-        metrics += 'Node_InterfaceRxBytes{node="%s"} %d %d\n' % (reporterID, obj[6], psm_date)
-        metrics += 'Node_InterfaceTxBytes{node="%s"} %d %d\n' % (reporterID, obj[7], psm_date)
-        metrics += 'Node_MemAvailable{node="%s"} %d %d\n' % (reporterID, obj[8], psm_date)
-        metrics += 'Node_MemFree{node="%s"} %d %d\n' % (reporterID, obj[9], psm_date)
-        metrics += 'Node_MemTotal{node="%s"} %d %d\n' % (reporterID, obj[10], psm_date)
-        metrics += 'Node_MemUsed{node="%s"} %d %d\n' % (reporterID, obj[11], psm_date)
-        metrics += 'Node_MemUsedPercent{node="%s"} %d %d\n' % (reporterID, obj[12], psm_date)
-
-    # Get MemoryMetrics Metrics from PSM
-    memory_metrics_json_objects = (json.loads(get_psm_metrics(app.config['psm_ip'], sid, "MemoryMetrics")['content']))["results"][0]["series"][0]["values"]
-
-    for obj in memory_metrics_json_objects:
-        psm_date = convert_time(obj[0])
-        reporterID = get_reporter_id(obj[5], app.config['switches'])
-        #reporterID = obj[5]
-
-        metrics += 'MemoryMetrics_Availablememory{node="%s"} %d %d\n' % (reporterID, obj[1], psm_date)
-        metrics += 'MemoryMetrics_Freememory{node="%s"} %d %d\n' % (reporterID, obj[2], psm_date)
-        metrics += 'MemoryMetrics_Totalmemory{node="%s"} %d %d\n' % (reporterID, obj[3], psm_date)
+    cluster_object = (json.loads(send_api_request(url, headers, '', 'cookies.txt', 'GET')['content']))
+    for node in cluster_object['status']['quorum-status']['members']:
+        if node['conditions'][0]['status'] == "true":
+            status = "Up"
+        else:
+            status = "Down"
+        metrics += 'Cluster_Node_IP{node_ip="%s" health_status="%s"} 1\n' % (node['name'], status)
 
     return metrics
 
 
-
-
-
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(host="0.0.0.0", port=5000)

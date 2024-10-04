@@ -1,0 +1,1693 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 3,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 0,
+          "y": 0
+        },
+        "id": 10,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "Cluster_HealthyNICs / Cluster_AdmittedNICs",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Healthy DSS",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 3,
+          "y": 0
+        },
+        "id": 11,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "Cluster_AdmittedNICs",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Total DSS",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 6,
+          "y": 0
+        },
+        "id": 12,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "DSC_Number_of_vrfs",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "# VRFs",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "num_vrfs"
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 10,
+          "y": 0
+        },
+        "id": 9,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "DSC_Number_of_networks",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "# VLANs",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "dark-orange",
+                    "index": 1,
+                    "text": "FALSE"
+                  },
+                  "1": {
+                    "color": "dark-green",
+                    "index": 0,
+                    "text": "TRUE"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 14,
+          "y": 0
+        },
+        "id": 8,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "exemplar": false,
+            "expr": "DSC_ELBA_enabled",
+            "format": "time_series",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "ELBA Enabled",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 7,
+          "x": 17,
+          "y": 0
+        },
+        "id": 17,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "IngressDrops_IPFragmentDrops",
+            "instant": false,
+            "legendFormat": "{{node}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "IP Fragment Drops",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "DSC Version"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 148
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 24,
+          "x": 0,
+          "y": 5
+        },
+        "id": 16,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "DSC_node",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Switch Info",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value": true,
+                "__name__": true,
+                "health_status": true,
+                "instance": true,
+                "job": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "Time": 0,
+                "Value": 10,
+                "__name__": 1,
+                "dsc_version": 4,
+                "forwarding_profile": 3,
+                "health_status": 5,
+                "instance": 6,
+                "job": 7,
+                "node": 2,
+                "serial": 8,
+                "switch_version": 9
+              },
+              "renameByName": {
+                "dsc_version": "DSC Version",
+                "forwarding_profile": "Profile",
+                "health_status": "Health Status",
+                "node": "Name",
+                "serial": "Serial Number",
+                "switch_version": "Switch Version"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 10
+        },
+        "id": 18,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_UDPSessionsOverIPv4) - sum(FlowStatsSummary_DeletedUDPSessionsOverIPv4)",
+            "instant": false,
+            "legendFormat": "UDP",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_TCPSessionsOverIPv4) - sum(FlowStatsSummary_DeletedTCPSessionsOverIPv4)",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "TCP",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_ICMPSessionsOverIPv4) - sum(FlowStatsSummary_DeletedICMPSessionsOverIPv4)",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "ICMP",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_OtherSessionsOverIPv4) - sum(FlowStatsSummary_DeletedOtherSessionsOverIPv4)",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "Other",
+            "range": true,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_L2Sessions) - sum(FlowStatsSummary_DeletedL2Sessions)",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "L2",
+            "range": true,
+            "refId": "E"
+          }
+        ],
+        "title": "Active Sessions Over IPv4",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "dark-red",
+                    "index": 1,
+                    "text": "DOWN"
+                  },
+                  "1": {
+                    "color": "dark-green",
+                    "index": 0,
+                    "text": "UP"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 24,
+          "x": 0,
+          "y": 18
+        },
+        "id": 7,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "exemplar": false,
+            "expr": "DSC_health_status",
+            "format": "time_series",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": true,
+            "legendFormat": "",
+            "range": false,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Switch Status",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 0,
+          "y": 24
+        },
+        "id": 14,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "FlowStatsSummary_TCPSessionsOverIPv4 - FlowStatsSummary_DeletedTCPSessionsOverIPv4",
+            "instant": false,
+            "legendFormat": "{{node}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Active TCP Sessions IPv4",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 12,
+          "y": 24
+        },
+        "id": 15,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "FlowStatsSummary_UDPSessionsOverIPv4 - FlowStatsSummary_DeletedUDPSessionsOverIPv4",
+            "instant": false,
+            "legendFormat": "{{node}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Active UDP Sessions IPv4",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [
+              {
+                "options": {
+                  "from": 41,
+                  "result": {
+                    "color": "dark-orange",
+                    "index": 2
+                  },
+                  "to": 50
+                },
+                "type": "range"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 31
+        },
+        "id": 6,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "AsicTemperatureMetrics_LocalTemperature",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "ASIC Local Temperature",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [
+              {
+                "options": {
+                  "from": 50,
+                  "result": {
+                    "color": "dark-green",
+                    "index": 0
+                  },
+                  "to": 80
+                },
+                "type": "range"
+              },
+              {
+                "options": {
+                  "from": 81,
+                  "result": {
+                    "color": "dark-orange",
+                    "index": 1
+                  },
+                  "to": 100
+                },
+                "type": "range"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 31
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "AsicTemperatureMetrics_DieTemperature",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "ASIC Die Temperature",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 7,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 8,
+          "x": 0,
+          "y": 37
+        },
+        "id": 1,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "PowerMetrics_Pin",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "DSM Power In",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 7,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 8,
+          "x": 8,
+          "y": 37
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "PowerMetrics_Pout1",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "DSM Power Out1",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 7,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 8,
+          "x": 16,
+          "y": 37
+        },
+        "id": 3,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "PowerMetrics_Pout2",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "DSM Power Out2",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      }
+    ],
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Switch Dashboard",
+    "uid": "adxeu9h7gd6v4e",
+    "version": 23,
+    "weekStart": ""
+  }

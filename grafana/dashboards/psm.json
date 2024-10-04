@@ -1,0 +1,680 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 2,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Health Status"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 146
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 0,
+          "y": 0
+        },
+        "id": 7,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "exemplar": false,
+            "expr": "Cluster_Node_IP",
+            "format": "table",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Cluster Info",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value": true,
+                "__name__": true,
+                "instance": true,
+                "job": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "health_status": "Health Status",
+                "node_ip": "PSM Node"
+              }
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "fields": {},
+              "sort": [
+                {
+                  "field": "PSM Node"
+                }
+              ]
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "dark-green",
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 6,
+          "y": 0
+        },
+        "id": 3,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "Node_MemUsedPercent{node=~\"$PSM_Node\"}\r\n",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Used Memory",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 12,
+          "y": 0
+        },
+        "id": 6,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "Node_CPUUsedPercent{node=~\"$PSM_Node\"}",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "CPU Usage",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "from": 71,
+                  "result": {
+                    "color": "dark-orange",
+                    "index": 2
+                  },
+                  "to": 85
+                },
+                "type": "range"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 90
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 18,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "Node_DiskUsedPercent{node=~\"$PSM_Node\"}",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Disk Usage",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "keepLabels": [
+                "node"
+              ],
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "yellow",
+              "mode": "fixed"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 6
+        },
+        "id": 4,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "Node_InterfaceRxBytes{node=~\"$PSM_Node\"}",
+            "format": "time_series",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Rx Bytes",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 6
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "Node_InterfaceTxBytes{node=~\"$PSM_Node\"}",
+            "format": "time_series",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Tx Bytes",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "10.9.20.71",
+            "value": "10.9.20.71"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "definition": "label_values(Node_CPUUsedPercent,node)",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "PSM_Node",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(Node_CPUUsedPercent,node)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "PSM Dashboard",
+    "uid": "cdxesk1ixw64gc",
+    "version": 20,
+    "weekStart": ""
+  }

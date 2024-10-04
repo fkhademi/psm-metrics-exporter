@@ -1,0 +1,1541 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 4,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 6,
+          "x": 0,
+          "y": 0
+        },
+        "id": 18,
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "IngressDrops_IPFragmentDrops > 0",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Switches with IP Fragment Drops",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 6,
+          "x": 6,
+          "y": 0
+        },
+        "id": 14,
+        "options": {
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "VnicDrops_PolicyDrops",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Vnic Policy Drops",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 6,
+          "x": 12,
+          "y": 0
+        },
+        "id": 16,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "VnicDrops_VmotionTransientDrops",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Vnic Vmotion Transient Drops",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 6,
+          "x": 18,
+          "y": 0
+        },
+        "id": 15,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "VnicDrops_UnexpectedSessionStateDrops",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Vnic Session State Drops",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 24,
+          "x": 0,
+          "y": 7
+        },
+        "id": 22,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_UDPSessionsOverIPv4) - sum(FlowStatsSummary_DeletedUDPSessionsOverIPv4)",
+            "instant": false,
+            "legendFormat": "UDP",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_TCPSessionsOverIPv4) - sum(FlowStatsSummary_DeletedTCPSessionsOverIPv4)",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "TCP",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_ICMPSessionsOverIPv4) - sum(FlowStatsSummary_DeletedICMPSessionsOverIPv4)",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "ICMP",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_OtherSessionsOverIPv4) - sum(FlowStatsSummary_DeletedOtherSessionsOverIPv4)",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "Other",
+            "range": true,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "editorMode": "code",
+            "expr": "sum(FlowStatsSummary_L2Sessions) - sum(FlowStatsSummary_DeletedL2Sessions)",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "L2",
+            "range": true,
+            "refId": "E"
+          }
+        ],
+        "title": "Active Sessions Over IPv4",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": [
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "cse-sw-cx10k-2"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": []
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 5,
+          "x": 0,
+          "y": 12
+        },
+        "id": 17,
+        "options": {
+          "displayLabels": [
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(FlowStatsSummary_UDPSessionsOverIPv4 - FlowStatsSummary_DeletedUDPSessionsOverIPv4) > 0",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "UDP Sessions over IPv4",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 5,
+          "x": 5,
+          "y": 12
+        },
+        "id": 13,
+        "options": {
+          "displayLabels": [
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "(FlowStatsSummary_TCPSessionsOverIPv4 - FlowStatsSummary_DeletedTCPSessionsOverIPv4) > 0",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "TCP Sessions Over IPv4",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 5,
+          "x": 10,
+          "y": 12
+        },
+        "id": 19,
+        "options": {
+          "displayLabels": [
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "(FlowStatsSummary_ICMPSessionsOverIPv4 - FlowStatsSummary_DeletedICMPSessionsOverIPv4) > 0",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "ICMP Sessions Over IPv4",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 4,
+          "x": 15,
+          "y": 12
+        },
+        "id": 20,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "(FlowStatsSummary_OtherSessionsOverIPv4 - FlowStatsSummary_DeletedOtherSessionsOverIPv4)",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Other Sessions Over IPv4",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 5,
+          "x": 19,
+          "y": 12
+        },
+        "id": 21,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "(FlowStatsSummary_L2Sessions - FlowStatsSummary_DeletedL2Sessions)",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "L2 Sessions",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 20
+        },
+        "id": 9,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "RuleMetrics_Hits > 0 ",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Packets That Hit Policy Rules",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 20
+        },
+        "id": 4,
+        "options": {
+          "displayLabels": [
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": " FlowStatsSummary_ConnTrackDisabledSessionsOverIPv4 - FlowStatsSummary_DeletedConnTrackDisabledSessionsOverIPv4",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "interval": "1m",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "ConnTrack Disabled Sessions Over IPv4",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 20
+        },
+        "id": 8,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "FlowStatsSummary_SessionCreateErrors",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "SessionCreateErrors",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 27
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "LifMetrics_RxUnicastBytes",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Rx Unicast Bytes",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 27
+        },
+        "id": 7,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "builder",
+            "expr": "LifMetrics_TxUnicastBytes",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Tx Unicast Bytes",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "node"
+            }
+          }
+        ],
+        "type": "timeseries"
+      }
+    ],
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Flow Statistics",
+    "uid": "fdxhdt7f303cwf",
+    "version": 18,
+    "weekStart": ""
+  }
