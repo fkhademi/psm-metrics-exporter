@@ -11,7 +11,18 @@ The APIs that will be published are:
 |```http://<host_ip>/switch-metrics```|Dataplane and Switch Metrics  
 
 
-![Metrics Architecture](metrics-exporter.png)
+![Metrics Architecture](img/metrics-exporter.png)
+_Fig. Metrics Architecture_  
+
+![Example Dashboard 1](img/example1.png)
+_Fig. Example Dashboard 1_  
+
+![Example Dashboard 2](img/example2.png)
+_Fig. Example Dashboard 2_  
+
+![Example Dashboard 3](img/example3.png)
+_Fig. Example Dashboard 3_  
+
 
 
 ## Getting Started  
