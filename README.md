@@ -66,8 +66,8 @@ sudo docker compose up -d
 
 ## Accessing the Infrastructure
 
-||||
-|---|---|---|
-| Grafana | http://<host_ip>:3000 | Several dashboards should be available to show control plane and data plane metrics
-| Prometheus | http://<host_ip>:9090 | Prometheus should be configured to scrape the PSM-Metrics api 
-| PSM-Metrics | http://<host_ip>:8080 | Metrics are scraped from the PSM and published in OpenTelemetry format
+| Service | URL | Description | Internal Port |
+|---|---|---|---|
+| **Grafana** | http://<host_ip>:3000 | Several dashboards should be available to show control plane and data plane metrics| 3000 |
+| **Prometheus** | http://<host_ip>:9090 | Prometheus should be configured to scrape the PSM-Metrics api | 9090 |
+| **PSM-Metrics** | http://<host_ip>:8080 | Metrics are scraped from the PSM and published in OpenTelemetry format | 5000 |
