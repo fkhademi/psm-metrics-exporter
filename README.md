@@ -7,8 +7,8 @@ The APIs that will be published are:
 
 | Metric Endpoint | Description | Metrics Captured|
 |---|---|---|  
-| ```http://<host_ip>/psm-metrics``` | Metrics from the PSM | Cluster, Node
-| ```http://<host_ip>/switch-metrics``` | Dataplane and Switch Metrics | PowerMetrics, AsicTemperatureMetrics, LifMetrics, EgressDrops, IngressDrops, FlowStatsSummary, DataPathAssistStats, VnicDrops, MemoryMetrics, AsicCpuMetrics, MacMetrics, IPsecEncryptMetrics, IPsecDecryptMetrics, RuleMetrics
+| ```http://<host_ip>:8080/psm-metrics``` | Metrics from the PSM | Cluster, Node
+| ```http://<host_ip>:8080/switch-metrics``` | Dataplane and Switch Metrics | PowerMetrics, AsicTemperatureMetrics, LifMetrics, EgressDrops, IngressDrops, FlowStatsSummary, DataPathAssistStats, VnicDrops, MemoryMetrics, AsicCpuMetrics, MacMetrics, IPsecEncryptMetrics, IPsecDecryptMetrics, RuleMetrics
 
 ## Architecture
 The following diagram shows how metrics are collected from the PSM, and in turn published as metrics APIs, which are scraped by Prometheus, and published as Grafana graphs.  The Metrics are published in OpenTelemetry format and can also be visualized in other observability platforms.  
