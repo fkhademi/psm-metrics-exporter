@@ -1,4 +1,4 @@
-# psm-prometheus-exporter
+# PSM Prometheus Exporter
 
 ## Description
 This code provides a cookie cutter approach for integrating the PSM metrics with Prometheus and Grafana.  The metrics will be read out of the PSM and put into an OpenTelemetry format and published as an API, so that Prometheus (or other Telemetry tools) can scrape them.
@@ -10,6 +10,8 @@ The APIs that will be published are:
 | ```http://<host_ip>/psm-metrics``` | Metrics from the PSM | Cluster, Node
 | ```http://<host_ip>/switch-metrics``` | Dataplane and Switch Metrics | PowerMetrics, AsicTemperatureMetrics, LifMetrics, EgressDrops, IngressDrops, FlowStatsSummary, DataPathAssistStats, VnicDrops, MemoryMetrics, AsicCpuMetrics, MacMetrics, IPsecEncryptMetrics, IPsecDecryptMetrics, RuleMetrics
 
+## Architecture
+The following diagram shows how metrics are collected from the PSM, and in turn published as metrics APIs, which are scraped by Prometheus, and published as Grafana graphs.  The Metrics are published in OpenTelemetry format and can also be visualized in other observability platforms.  
 
 | ![Metrics Architecture](img/metrics-exporter.png) |
 |-|  
