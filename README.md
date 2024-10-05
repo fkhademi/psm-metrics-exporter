@@ -5,10 +5,10 @@ This code provides a cookie cutter approach for integrating the PSM metrics with
 
 The APIs that will be published are:
 
-|||
-|---|---|  
-|```http://<host_ip>/psm-metrics```|Metrics from the PSM
-|```http://<host_ip>/switch-metrics```|Dataplane and Switch Metrics  
+| Metric Endpoint | Description | Metrics Captured|
+|---|---|---|  
+| ```http://<host_ip>/psm-metrics``` | Metrics from the PSM | Cluster, Node
+| ```http://<host_ip>/switch-metrics``` | Dataplane and Switch Metrics | PowerMetrics, AsicTemperatureMetrics, LifMetrics, EgressDrops, IngressDrops, FlowStatsSummary, DataPathAssistStats, VnicDrops, MemoryMetrics, AsicCpuMetrics, MacMetrics, IPsecEncryptMetrics, IPsecDecryptMetrics, RuleMetrics
 
 
 ![Metrics Architecture](img/metrics-exporter.png)  
@@ -68,6 +68,6 @@ sudo docker compose up -d
 
 | Service | URL | Description | Internal Port |
 |---|---|---|---|
-| **Grafana** | http://<host_ip>:3000 | Several dashboards should be available to show control plane and data plane metrics| 3000 |
-| **Prometheus** | http://<host_ip>:9090 | Prometheus should be configured to scrape the PSM-Metrics api | 9090 |
-| **PSM-Metrics** | http://<host_ip>:8080 | Metrics are scraped from the PSM and published in OpenTelemetry format | 5000 |
+| **Grafana** | ``http://<host_ip>:3000`` | Several dashboards should be available showing control plane and data plane metrics| 3000 |
+| **Prometheus** | ``http://<host_ip>:9090`` | Prometheus should be configured to scrape the PSM-Metrics api | 9090 |
+| **PSM-Metrics** | ``http://<host_ip>:8080`` | Metrics are scraped from the PSM and published in OpenTelemetry format | 5000 |
