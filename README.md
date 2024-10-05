@@ -11,7 +11,8 @@ The APIs that will be published are:
 | ```http://<host_ip>/switch-metrics``` | Dataplane and Switch Metrics | PowerMetrics, AsicTemperatureMetrics, LifMetrics, EgressDrops, IngressDrops, FlowStatsSummary, DataPathAssistStats, VnicDrops, MemoryMetrics, AsicCpuMetrics, MacMetrics, IPsecEncryptMetrics, IPsecDecryptMetrics, RuleMetrics
 
 
-![Metrics Architecture](img/metrics-exporter.png)  
+| ![Metrics Architecture](img/metrics-exporter.png) |
+|-|  
 _Fig. Metrics Architecture_  
 
 ![Example Dashboard 1](img/example1.png)  
