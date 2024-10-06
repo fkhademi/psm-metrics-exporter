@@ -1,4 +1,4 @@
-# PSM Prometheus Exporter
+# PSM Metrics Exporter
 
 ## Description
 This code provides a cookie cutter approach for integrating the PSM metrics with Prometheus and Grafana.  The metrics will be read out of the PSM and put into an OpenTelemetry format and published as an API, so that Prometheus (or other Telemetry tools) can scrape them.
