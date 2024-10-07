@@ -1,7 +1,7 @@
 # PSM Metrics Exporter
 
 ## Description
-This repo provides an approach for taking PSM metrics, and converting them to a format that can be scraoed by Prometheus (or other another TSDB) and visualized in Grafana.  
+This repo provides an approach for taking PSM metrics, and converting them to a format that can be scraped by Prometheus (or another TSDB) and visualized in Grafana.  
 
 The metrics will be published and available via the following endpoints:  
 
