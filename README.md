@@ -1,9 +1,9 @@
 # PSM Metrics Exporter
 
 ## Description
-This code provides a cookie cutter approach for integrating the PSM metrics with Prometheus and Grafana.  The metrics will be read out of the PSM and put into an OpenTelemetry format and published as an API, so that Prometheus (or other Telemetry tools) can scrape them.
+This repo provides an approach for taking PSM metrics, and converting them to a format that can be scraoed by Prometheus (or other another TSDB) and visualized in Grafana.  
 
-The APIs that will be published are:
+The metrics will be published and available via the following endpoints:  
 
 | Metric Endpoint | Description | Metrics Captured|
 |---|---|---|  
@@ -16,17 +16,6 @@ The following diagram shows how metrics are collected from the PSM, and in turn 
 | ![Metrics Architecture](img/metrics-exporter.png) |
 |-|  
 _Fig. Metrics Architecture_  
-
-![Example Dashboard 1](img/example1.png)  
-_Fig. Example Dashboard 1_  
-
-![Example Dashboard 2](img/example2.png)  
-_Fig. Example Dashboard 2_  
-
-![Example Dashboard 3](img/example3.png)  
-_Fig. Example Dashboard 3_  
-
-
 
 ## Getting Started  
 
@@ -73,4 +62,13 @@ sudo docker compose up -d
 |---|---|---|---|
 | **Grafana** | ``http://<host_ip>:3000`` | Several dashboards should be available showing control plane and data plane metrics| 3000 |
 | **Prometheus** | ``http://<host_ip>:9090`` | Prometheus should be configured to scrape the PSM-Metrics api | 9090 |
-| **PSM-Metrics** | ``http://<host_ip>:8080`` | Metrics are scraped from the PSM and published in OpenTelemetry format | 5000 |
+| **PSM-Metrics** | ``http://<host_ip>:8080`` | Metrics are scraped from the PSM and published in OpenTelemetry format | 5000 |  
+
+![Example Dashboard 1](img/example1.png)  
+_Fig. Example Dashboard 1_  
+
+![Example Dashboard 2](img/example2.png)  
+_Fig. Example Dashboard 2_  
+
+![Example Dashboard 3](img/example3.png)  
+_Fig. Example Dashboard 3_  
