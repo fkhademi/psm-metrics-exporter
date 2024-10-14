@@ -292,6 +292,8 @@ def switch_metrics():
             vrf_counter = vrf_counter + 1
     metrics += 'DSC_Number_of_vrfs{num_vrfs="%d"} %d' % (vrf_counter, vrf_counter)
 
+    metrics += 'DSC_config_info{num_vrfs="%d" num_networks="%d" elba_enabled="%s"} 1\n' % (vrf_counter, network_counter, elba_enabled)
+
     return metrics
 
 @app.route('/psm-metrics')

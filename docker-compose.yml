@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./prometheus:/etc/prometheus
-      - prom_data:/prometheus
+      - /tmp/prometheus:/prometheus
   grafana:
     image: grafana/grafana
     container_name: grafana
