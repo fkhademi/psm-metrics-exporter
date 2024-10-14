@@ -38,20 +38,27 @@ curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compo
 chmod +x ~/.docker/cli-plugins/docker-compose
 ```  
 
-3. Clone the repo:
+3. Create a local directory for Prometheus storage:
+```console
+sudo mkdir /tmp/prometheus
+sudo chown 65534:65534 /tmp/prometheus
+sudo chown 65534:65534 /tmp/prometheus/*
+```
+
+4. Clone the repo:
 
 ```console
 git clone https://github.com/fkhademi/psm-metrics-exporter.git
 ```
 
-4. Edit docker-compose.yml and edit PSM IP, User and Password:
+5. Edit docker-compose.yml and edit PSM IP, User and Password:
 
 ```console
 cd psm-metrics-exporter
 vi docker-compose.yml
 ```
 
-5. Start the Containers:
+6. Start the Containers:
 ```console
 sudo docker compose up -d
 ```
